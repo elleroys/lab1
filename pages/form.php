@@ -1,4 +1,4 @@
-<form method="post" action="index.php?page=result">
+<form id="myForm" method="post" action="index.php?page=result">
     <label for="lastname">Прізвище</label>
     <input id="lastname" name="lastname" required>
 
@@ -24,3 +24,33 @@
 
     <button class="btn" type="submit">Надіслати</button>
 </form>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        // Регулярний вираз для англійських літер (великих і малих)
+        const engRegex = /^[A-Za-z]+$/;
+
+        // Збираємо поля для перевірки ПІБ
+        const fields = [
+            {id: 'lastname', label: 'Прізвище'},
+            {id: 'firstname', label: "Ім'я"},
+            {id: 'middlename', label: 'По‑батькові'}
+        ];
+
+        let errors = [];
+
+        fields.forEach(field => {
+            const input = document.getElementById(field.id);
+            const value = input.value.trim();
+
+            if (value.length > 0 && !engRegex.test(value)) {
+                errors.push(`Поле "${field.label}" містить неанглійські символи.`);
+            }
+        });
+
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
+            event.preventDefault(); // Не відправляти форму
+        }
+    });
+</script>
